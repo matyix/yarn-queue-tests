@@ -9,11 +9,14 @@ import org.apache.hadoop.mapreduce.JobID;
 import org.apache.hadoop.yarn.api.records.QueueInfo;
 import org.apache.hadoop.yarn.client.api.YarnClient;
 import org.apache.hadoop.yarn.client.api.impl.YarnClientImpl;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.sequenceiq.yarntest.mr.QuasiMonteCarlo;
 
 public class QueueOrchestrator {
 
+	private static final Logger LOGGER = LoggerFactory.getLogger(QueueOrchestrator.class);
 	public JobID submitJobsIntoQueues(String queueName, Path tempDir) throws Exception {
 		
 		Configuration priorityConf = this.getConfiguration(queueName);
@@ -25,7 +28,7 @@ public class QueueOrchestrator {
         
         List<QueueInfo> queues = yarnClient.getAllQueues();
         for (QueueInfo queueInfo : queues) {
-			System.out.println("Queue Informations (name, capacity, current capacity): " + queueInfo.getQueueName() + " "+ queueInfo.getCapacity() + " " + queueInfo.getCurrentCapacity());
+			LOGGER.info("Queue Informations (name, capacity, current capacity): " + queueInfo.getQueueName() + " "+ queueInfo.getCapacity() + " " + queueInfo.getCurrentCapacity());
 		} 
 		
         FileSystem fs = FileSystem.get(priorityConf);

@@ -7,26 +7,30 @@ import org.apache.hadoop.mapreduce.JobID;
 import org.apache.hadoop.mapreduce.JobStatus;
 import org.apache.hadoop.mapreduce.TaskType;
 import org.apache.hadoop.mapreduce.TaskReport;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class MRJobStatus {
-
+	
+	private static final Logger LOGGER = LoggerFactory.getLogger(MRJobStatus.class);
+	
 	public JobStatus printJobStatus(YARNRunner yarnRunner, JobID jobID) throws IOException, InterruptedException {
 		JobStatus jobStatus;
 		jobStatus = yarnRunner.getJobStatus(jobID);
 		
 		// print overall job M/R progresses
-		System.out.println(jobStatus.getJobName() + " (" + jobStatus.getQueue() + ")" + " progress M/R: " + jobStatus.getMapProgress() + "/" + jobStatus.getReduceProgress());
-		System.out.println(jobStatus.getTrackingUrl());
-		System.out.println(jobStatus.getReservedMem() + " "+ jobStatus.getUsedMem() + " "+ jobStatus.getNumUsedSlots());
+		LOGGER.info("Job " + jobStatus.getJobName() + "in queue (" + jobStatus.getQueue() + ")" + " progress M/R: " + jobStatus.getMapProgress() + "/" + jobStatus.getReduceProgress());
+		LOGGER.info("Tracking URL : " + jobStatus.getTrackingUrl());
+		LOGGER.info("Reserved memory : " + jobStatus.getReservedMem() + ", used memory : "+ jobStatus.getUsedMem() + " and used slots : "+ jobStatus.getNumUsedSlots());
 		
 		// list map & reduce tasks statuses and progress		
 		TaskReport[] reports = yarnRunner.getTaskReports(jobID, TaskType.MAP);
 		for (int i = 0; i < reports.length; i++) {
-			System.out.println("MAP: " + reports[i].getCurrentStatus() + " " + reports[i].getTaskID() + " " + reports[i].getProgress()); 
+			LOGGER.info("MAP: Status " + reports[i].getCurrentStatus() + " with task ID " + reports[i].getTaskID() + ", progress " + reports[i].getProgress()); 
 		}
 		reports = yarnRunner.getTaskReports(jobID, TaskType.REDUCE);
 		for (int i = 0; i < reports.length; i++) {
-			System.out.println("REDUCE: " + reports[i].getCurrentStatus() + " " + reports[i].getTaskID() + " " + reports[i].getProgress()); 
+			System.out.println("REDUCE: " + reports[i].getCurrentStatus() + " with task ID " + reports[i].getTaskID() + ", progress " + reports[i].getProgress()); 
 		}
 		return jobStatus;
 	}	

@@ -9,14 +9,20 @@ import org.apache.hadoop.mapred.YARNRunner;
 import org.apache.hadoop.mapreduce.JobID;
 import org.apache.hadoop.mapreduce.JobStatus;
 import org.codehaus.jackson.map.ObjectMapper;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.sequenceiq.yarntest.monitoring.MRJobStatus;
 import com.sequenceiq.yarntest.monitoring.QueueInformation;
 import com.sequenceiq.yarntest.mr.QuasiMonteCarlo;
 import com.sequenceiq.yarntest.queue.QueueOrchestrator;
 
-public class JobClient {
 
+
+public class JobClient {
+	
+	 private static final Logger LOGGER = LoggerFactory.getLogger(JobClient.class);
+	
 	public static void main(String[] args) {
 		try {
 			JobClient jobClient = new JobClient();
@@ -25,6 +31,7 @@ public class JobClient {
 			ObjectMapper mapper = new ObjectMapper();
 			String schedulerURL = "http://sandbox.hortonworks.com:8088/ws/v1/cluster/scheduler";
 			
+			LOGGER.info("Scheduler URL: ", schedulerURL);
 			MRJobStatus mrJobStatus = new MRJobStatus();
 			QueueInformation queueInformation = new QueueInformation();
 			
@@ -61,8 +68,7 @@ public class JobClient {
 			}
 		
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			LOGGER.error("Exception occured", e);
 		}
 	}
 
@@ -70,7 +76,8 @@ public class JobClient {
 	private Path createTempDir() {
 		long now = System.currentTimeMillis();
 	    int rand = new Random().nextInt(Integer.MAX_VALUE);
-	    Path tmpDir = new Path(QuasiMonteCarlo.TMP_DIR_PREFIX + "_" + now + "_" + rand);
-		return tmpDir;
+	    Path tempDir = new Path(QuasiMonteCarlo.TMP_DIR_PREFIX + "_" + now + "_" + rand);
+	    LOGGER.info("HDFS temp dir : ", tempDir);
+		return tempDir;
 	}
 }
