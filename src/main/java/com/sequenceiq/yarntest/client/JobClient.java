@@ -73,22 +73,4 @@ public class JobClient {
 	    Path tmpDir = new Path(QuasiMonteCarlo.TMP_DIR_PREFIX + "_" + now + "_" + rand);
 		return tmpDir;
 	}
-	
-	
-
 }
-
-//
-////list job statuses & queue infos until job is completed
-//JobStatus highPrioJobStatus = printJobStatus(yarnRunner, highPrioJobID);
-//JobStatus lowPrioJobStatus = printJobStatus(yarnRunner, lowPrioJobID);
-//
-//for(;!lowPrioJobStatus.isJobComplete();) {
-//	highPrioJobStatus = printJobStatus(yarnRunner, highPrioJobID);								
-//    lowPrioJobStatus = printJobStatus(yarnRunner, lowPrioJobID);				
-//	
-//    printQueueInfo(client, mapper);
-//	Thread.sleep(1000);
-//}
-//
-//http://sandbox.hortonworks.com:8088/ws/v1/cluster/scheduler
