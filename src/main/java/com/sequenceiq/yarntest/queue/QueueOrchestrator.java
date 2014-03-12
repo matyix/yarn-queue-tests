@@ -22,14 +22,14 @@ public class QueueOrchestrator {
 		Configuration priorityConf = this.getConfiguration(queueName);
 
 		// list queue with YarnClient, not so useful
-		YarnClient yarnClient = new YarnClientImpl();
-        yarnClient.init(priorityConf);
-        yarnClient.start();  
-        
-        List<QueueInfo> queues = yarnClient.getAllQueues();
-        for (QueueInfo queueInfo : queues) {
-			LOGGER.info("Queue Informations (name, capacity, current capacity): " + queueInfo.getQueueName() + " "+ queueInfo.getCapacity() + " " + queueInfo.getCurrentCapacity());
-		} 
+//		YarnClient yarnClient = new YarnClientImpl();
+//        yarnClient.init(priorityConf);
+//        yarnClient.start();  
+//        
+//        List<QueueInfo> queues = yarnClient.getAllQueues();
+//        for (QueueInfo queueInfo : queues) {
+//			LOGGER.info("Queue Informations (name, capacity, current capacity): " + queueInfo.getQueueName() + " "+ queueInfo.getCapacity() + " " + queueInfo.getCurrentCapacity());
+//		} 
 		
         FileSystem fs = FileSystem.get(priorityConf);
          
@@ -41,7 +41,7 @@ public class QueueOrchestrator {
 		    
 	    } finally {
 	    	fs.deleteOnExit(tempDir);
-	    	yarnClient.close();
+	    //	yarnClient.close();
 	    	LOGGER.debug("Deleting temp dir and closign YARN client");
 	    	
 	    }

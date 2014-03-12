@@ -19,7 +19,7 @@ public class MRJobStatus {
 		jobStatus = yarnRunner.getJobStatus(jobID);
 		
 		// print overall job M/R progresses
-		LOGGER.info("Job " + jobStatus.getJobName() + "in queue (" + jobStatus.getQueue() + ")" + " progress M/R: " + jobStatus.getMapProgress() + "/" + jobStatus.getReduceProgress());
+		LOGGER.info("\nJob " + jobStatus.getJobName() + "in queue (" + jobStatus.getQueue() + ")" + " progress M/R: " + jobStatus.getMapProgress() + "/" + jobStatus.getReduceProgress());
 		LOGGER.info("Tracking URL : " + jobStatus.getTrackingUrl());
 		LOGGER.info("Reserved memory : " + jobStatus.getReservedMem() + ", used memory : "+ jobStatus.getUsedMem() + " and used slots : "+ jobStatus.getNumUsedSlots());
 		

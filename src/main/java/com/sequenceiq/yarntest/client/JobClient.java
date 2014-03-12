@@ -47,26 +47,29 @@ public class JobClient {
 			
 			String lowPriorityQueue = new String("lowPriority");
 			String highPriorityQueue = new String("highPriority");
+
+			// create YarnRunner to use for job status listing
+			Configuration lowPriorityConf = qo.getConfiguration(lowPriorityQueue);
+			// doesn't matter the configuration as we use YarnRunner only to retrieve job status info 
+	        YARNRunner yarnRunner = new YARNRunner(lowPriorityConf);
+			
+	     	Configuration highPriorityConf = qo.getConfiguration(lowPriorityQueue);
+
 			
 			JobID lowPriorityJobID = qo.submitJobsIntoQueues(lowPriorityQueue, tempDirLow);
 			JobID highPriorityJobID = qo.submitJobsIntoQueues(highPriorityQueue, tempDirHigh);
 			
-			Configuration lowPriorityConf = qo.getConfiguration(lowPriorityQueue);
-			// create YarnRunner to use for job status listing
-	        YARNRunner yarnRunnerLow = new YARNRunner(lowPriorityConf);
-			// list low priority job status
-			JobStatus lowPriorityJobStatus = mrJobStatus.printJobStatus(yarnRunnerLow, lowPriorityJobID);
 			
-			Configuration highPriorityConf = qo.getConfiguration(highPriorityQueue);
-			// create YarnRunner to use for job status listing
-			YARNRunner yarnRunnerHigh = new YARNRunner(highPriorityConf);
+			// list low priority job status
+			JobStatus lowPriorityJobStatus = mrJobStatus.printJobStatus(yarnRunner, lowPriorityJobID);
+						
 			// list high priority job status
-			JobStatus highPriorityJobStatus = mrJobStatus.printJobStatus(yarnRunnerHigh, highPriorityJobID);
+			JobStatus highPriorityJobStatus = mrJobStatus.printJobStatus(yarnRunner, highPriorityJobID);
 					
 			// list job statuses & queue information until job(s) are completed
 			for(;!lowPriorityJobStatus.isJobComplete();) {
-				highPriorityJobStatus = mrJobStatus.printJobStatus(yarnRunnerLow, highPriorityJobID);								
-				lowPriorityJobStatus = mrJobStatus.printJobStatus(yarnRunnerHigh, lowPriorityJobID);				
+				highPriorityJobStatus = mrJobStatus.printJobStatus(yarnRunner, highPriorityJobID);								
+				lowPriorityJobStatus = mrJobStatus.printJobStatus(yarnRunner, lowPriorityJobID);				
 				
 				queueInformation.printQueueInfo(client, mapper, schedulerURL);
 				Thread.sleep(1000);
