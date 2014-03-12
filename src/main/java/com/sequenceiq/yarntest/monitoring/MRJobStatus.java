@@ -26,11 +26,11 @@ public class MRJobStatus {
 		// list map & reduce tasks statuses and progress		
 		TaskReport[] reports = yarnRunner.getTaskReports(jobID, TaskType.MAP);
 		for (int i = 0; i < reports.length; i++) {
-			LOGGER.info("MAP: Status " + reports[i].getCurrentStatus() + " with task ID " + reports[i].getTaskID() + ", progress " + reports[i].getProgress()); 
+			LOGGER.info("MAP: Status " + reports[i].getCurrentStatus() + " with task ID " + reports[i].getTaskID() + ", and progress " + reports[i].getProgress()); 
 		}
 		reports = yarnRunner.getTaskReports(jobID, TaskType.REDUCE);
 		for (int i = 0; i < reports.length; i++) {
-			System.out.println("REDUCE: " + reports[i].getCurrentStatus() + " with task ID " + reports[i].getTaskID() + ", progress " + reports[i].getProgress()); 
+			LOGGER.info("REDUCE: " + reports[i].getCurrentStatus() + " with task ID " + reports[i].getTaskID() + ", and progress " + reports[i].getProgress()); 
 		}
 		return jobStatus;
 	}	

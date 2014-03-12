@@ -42,6 +42,7 @@ public class QueueOrchestrator {
 	    } finally {
 	    	fs.deleteOnExit(tempDir);
 	    	yarnClient.close();
+	    	LOGGER.debug("Deleting temp dir and closign YARN client");
 	    	
 	    }
 	}
@@ -51,7 +52,7 @@ public class QueueOrchestrator {
 		priorityConf.set("mapreduce.job.queuename", queueName);
 		
 		/**
-		 * Additional job configuration parameters can be submitted for the job
+		 * Additional job configuration parameters can be submitted for the job programatically
 		conf.set(MRJobConfig.MAP_CPU_VCORES, "2");
 		conf.set(MRJobConfig.MAP_MEMORY_MB, "2048");
 		conf.set(MRJobConfig.REDUCE_CPU_VCORES, "1");

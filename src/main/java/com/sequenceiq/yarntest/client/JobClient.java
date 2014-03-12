@@ -31,14 +31,19 @@ public class JobClient {
 			ObjectMapper mapper = new ObjectMapper();
 			String schedulerURL = "http://sandbox.hortonworks.com:8088/ws/v1/cluster/scheduler";
 			
+			LOGGER.info("Starting YARN Capacity Queue Test");
+			LOGGER.info("yarn.scheduler.capacity.root.queues = default,highPriority,lowPriority");
+			LOGGER.info("yarn.scheduler.capacity.root.highPriority.capacity = 70");
+			LOGGER.info("yarn.scheduler.capacity.root.lowPriority.capacity = 20");
+			LOGGER.info("yarn.scheduler.capacity.root.highPriority.default = 10");
 			LOGGER.info("Scheduler URL: ", schedulerURL);
 			MRJobStatus mrJobStatus = new MRJobStatus();
 			QueueInformation queueInformation = new QueueInformation();
 			
 			//Create low priority setup - low priority root queue (capacity-scheduler.xml)
-			Path tempDirLow = jobClient.createTempDir();
+			Path tempDirLow = jobClient.createTempDir("lowPriority");
 			//Create high priority setup - high priority root queue (capacity-scheduler.xml)
-			Path tempDirHigh = jobClient.createTempDir();
+			Path tempDirHigh = jobClient.createTempDir("highPriority");
 			
 			String lowPriorityQueue = new String("lowPriority");
 			String highPriorityQueue = new String("highPriority");
@@ -73,11 +78,11 @@ public class JobClient {
 	}
 
 	
-	private Path createTempDir() {
+	private Path createTempDir(String priority) {
 		long now = System.currentTimeMillis();
 	    int rand = new Random().nextInt(Integer.MAX_VALUE);
-	    Path tempDir = new Path(QuasiMonteCarlo.TMP_DIR_PREFIX + "_" + now + "_" + rand);
-	    LOGGER.info("HDFS temp dir : ", tempDir);
+	    Path tempDir = new Path(QuasiMonteCarlo.TMP_DIR_PREFIX + "_" + now + "_" + rand+ "_" + priority);
+	    LOGGER.info("HDFS temp dir for" + priority.toUpperCase() + "is :", tempDir);
 		return tempDir;
 	}
 }
